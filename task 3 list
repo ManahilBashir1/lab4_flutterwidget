@@ -1,0 +1,130 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Scrollable ListView',
+      theme: ThemeData(
+        primarySwatch: Colors.brown, // Brown theme
+        scaffoldBackgroundColor: const Color(0xFFF5F5DC), // Beige background
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.brown, // Brown AppBar
+          elevation: 10,
+          centerTitle: true,
+        ),
+        cardTheme: CardTheme(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          color: const Color(0xFFFFF8E7), // Light beige card background
+        ),
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  // Sample data for the list
+  final List<Map<String, String>> items = const [
+    {
+      'category': 'Books',
+      'title': 'The Great Gatsby',
+      'subtitle': 'F. Scott Fitzgerald',
+      'image': '📘',
+    },
+    {
+      'category': 'Books',
+      'title': 'To Kill a Mockingbird',
+      'subtitle': 'Harper Lee',
+      'image': '📗',
+    },
+    {
+      'category': 'Beauty Products',
+      'title': 'Moisturizer',
+      'subtitle': 'Hydrates and nourishes skin',
+      'image': '💧',
+    },
+    {
+      'category': 'Beauty Products',
+      'title': 'Lipstick',
+      'subtitle': 'Long-lasting matte finish',
+      'image': '💄',
+    },
+    {
+      'category': 'Tech Items',
+      'title': 'Wireless Earbuds',
+      'subtitle': 'Noise-cancelling, 20hr battery',
+      'image': '🎧',
+    },
+    {
+      'category': 'Tech Items',
+      'title': 'Smartwatch',
+      'subtitle': 'Fitness tracking, heart rate monitor',
+      'image': '⌚',
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Scrollable ListView'),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return Card(
+            margin: const EdgeInsets.only(bottom: 16),
+            child: ListTile(
+              leading: Text(
+                item['image']!,
+                style: const TextStyle(fontSize: 40),
+              ),
+              title: Text(
+                item['title']!,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.brown,
+                ),
+              ),
+              subtitle: Text(
+                item['subtitle']!,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.brown,
+                ),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.brown[800],
+              ),
+              onTap: () {
+                // Add interactivity here
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('You selected: ${item['title']}'),
+                    backgroundColor: Colors.brown,
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
