@@ -1,0 +1,196 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Refactored Complex UI',
+      theme: ThemeData(
+        primarySwatch: Colors.teal, // Teal theme
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _displayText = 'Enter something and click the button!';
+
+  void _updateDisplayText(String text) {
+    setState(() {
+      _displayText = text.isEmpty
+          ? 'Please enter something!'
+          : 'You entered: $text';
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const AppBarWidget(),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            InputRowWidget(onTextUpdated: _updateDisplayText),
+            const SizedBox(height: 20),
+            DisplayTextWidget(displayText: _displayText),
+            const SizedBox(height: 20),
+            const IconRowWidget(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Custom AppBar Widget
+class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+  const AppBarWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: const Text('Refactored Complex UI'),
+      centerTitle: true,
+      elevation: 10,
+      backgroundColor: Colors.teal,
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+// Input Row Widget (TextField + Button)
+class InputRowWidget extends StatefulWidget {
+  final Function(String) onTextUpdated; // Callback function
+  const InputRowWidget({super.key, required this.onTextUpdated});
+
+  @override
+  State<InputRowWidget> createState() => _InputRowWidgetState();
+}
+
+class _InputRowWidgetState extends State<InputRowWidget> {
+  final TextEditingController _textController = TextEditingController();
+
+  void _updateText() {
+    widget.onTextUpdated(_textController.text); // Call the callback
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            controller: _textController,
+            decoration: InputDecoration(
+              hintText: 'Enter something...',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              filled: true,
+              fillColor: Colors.teal[50], // Light teal background
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        ElevatedButton(
+          onPressed: _updateText,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.teal, // Teal button
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 15,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          child: const Text(
+            'Submit',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// Display Text Widget
+class DisplayTextWidget extends StatelessWidget {
+  final String displayText; // Dynamic text
+  const DisplayTextWidget({super.key, required this.displayText});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16), // Use const for padding
+      decoration: BoxDecoration(
+        color: Colors.teal[100], // Non-constant value
+        borderRadius: BorderRadius.circular(10), // Non-constant value
+        border: Border.all(
+          color: Colors.teal, // Non-constant value
+          width: 2,
+        ),
+      ),
+      child: Text(
+        displayText,
+        style: const TextStyle(
+          fontSize: 18,
+          color: Colors.teal, // Use constant value
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+
+// Icon Row Widget
+class IconRowWidget extends StatelessWidget {
+  const IconRowWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: const [
+        Icon(
+          Icons.star,
+          size: 40,
+          color: Colors.teal,
+        ),
+        Icon(
+          Icons.favorite,
+          size: 40,
+          color: Colors.teal,
+        ),
+        Icon(
+          Icons.thumb_up,
+          size: 40,
+          color: Colors.teal,
+        ),
+      ],
+    );
+  }
+}
